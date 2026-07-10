@@ -32,7 +32,7 @@ REFERRAL_DB = "referral_db.json"
 
 # Reward structure — tune to your economics
 REWARDS = {
-    "client_referral": {"referrer": "1 month 20% off", "new_client": "1 month 20% off"},
+        "client_referral": {"referrer": "1 month 50% off", "new_client": "1 month 50% off"},
     "affiliate": {"commission_pct": 15, "note": "15% of first month's fee, one-time, per converted client"},
 }
 
