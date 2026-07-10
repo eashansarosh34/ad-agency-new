@@ -25,4 +25,5 @@ jobs:
           GOOGLE_ADS_REFRESH_TOKEN: ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
           GOOGLE_ADS_CUSTOMER_ID: ${{ secrets.GOOGLE_ADS_CUSTOMER_ID }}
           GOOGLE_BUDGET_RESOURCE: ${{ secrets.GOOGLE_BUDGET_RESOURCE }}
+                    ORCHESTRATOR_DRY_RUN: ${{ secrets.ORCHESTRATOR_DRY_RUN }}
         run: python3 agent_13_cross_channel_arbitrage.py
