@@ -42,7 +42,7 @@ API_VERSION = "v21.0"
 BASE_URL = os.environ.get("META_API_URL", f"https://graph.facebook.com/{API_VERSION}")
 CLIENT_NAME = os.environ.get("CLIENT_NAME", "Client")
 
-DRY_RUN = True  # <-- flip to False only once you trust this on a live account
+DRY_RUN = os.environ.get("ORCHESTRATOR_DRY_RUN", "true").lower() != "false"  # controlled via GitHub Secret
 
 # Budget Guardian — set BUDGET_CEILING to your client's agreed hard cap.
 # When total spend hits this, all ads pause automatically and the client
