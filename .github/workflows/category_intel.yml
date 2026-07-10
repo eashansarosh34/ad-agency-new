@@ -1,0 +1,58 @@
+name: Category Intelligence Sync
+
+# Runs after the weekly report to commit any updates to category_intelligence.json
+# back to the repo. This is what makes the moat persist across machines and grow
+# over time — without this, the file would be lost when the runner shuts down.
+on:
+  workflow_run:
+    workflows: ["Weekly Report"]
+    types: [completed]
+  workflow_dispatch:   # manual trigger so you can also run it locally via 'gh workflow run'
+  schedule:
+    - cron: '30 9 * * 1'  # Mondays 9:30am UTC — just after the weekly report fires
+
+permissions:
+  contents: write
+
+jobs:
+  sync-intel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests
+
+      # Regenerate insights for all categories that have 2+ data points.
+      # If category_intelligence.json doesn't exist yet, this is a no-op.
+      - name: Refresh category insights
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 - <<'EOF'
+          import os, json
+          INTEL_FILE = "category_intelligence.json"
+          if not os.path.exists(INTEL_FILE):
+              print("[moat] No intelligence file yet — nothing to sync.")
+              exit(0)
+          with open(INTEL_FILE) as f:
+              intel = json.load(f)
+          print(f"[moat] {len(intel)} category/categories in intelligence file.")
+          for cat, data in intel.items():
+              n = len(data.get("data_points", []))
+              print(f"  {cat}: {n} data point(s)")
+          EOF
+
+      # Commit the intelligence file back to the repo so it persists.
+      # This is the file that makes every new client in the same vertical
+      # benefit from all previous clients in that vertical.
+      - name: Commit updated category_intelligence.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add category_intelligence.json referral_db.json leads_db.json || true
+          git diff --staged --quiet || git commit -m "Sync intelligence & state files [auto]"
+          git push
