@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Content & Social Studio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12161D; --ink-soft:#1B212B; --panel:#1E2530; --panel-raised:#242C38;
+    --hairline:rgba(241,237,227,0.09); --paper:#F1EDE3; --muted:#8B93A1;
+    --marigold:#E8A33D; --marigold-soft:rgba(232,163,61,0.16);
+    --sage:#7FA37A; --rust:#C97B5F; --radius:14px;
+  }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:780px; margin:0 auto; padding:32px 20px 60px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; color:var(--marigold); text-transform:uppercase; margin-bottom:10px; }
+  h1{ font-family:'Fraunces',serif; font-weight:600; font-size:28px; margin:0 0 6px; letter-spacing:-0.01em; }
+  .sub{ color:var(--muted); font-size:14px; margin:0 0 24px; }
+
+  .tabs{ display:flex; gap:8px; margin-bottom:22px; border-bottom:1px solid var(--hairline); }
+  .tab{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--muted); background:none; border:none; padding:10px 4px; cursor:pointer; border-bottom:2px solid transparent; }
+  .tab.active{ color:var(--marigold); border-bottom-color:var(--marigold); }
+  .panel{ display:none; } .panel.active{ display:block; }
+
+  form{ background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:22px; }
+  .field{ display:flex; flex-direction:column; gap:6px; } .field.full{ grid-column:1 / -1; }
+  label{ font-size:12px; color:var(--muted); font-family:'IBM Plex Mono',monospace; }
+  input, select, textarea{ background:var(--ink-soft); border:1px solid var(--hairline); color:var(--paper); border-radius:8px; padding:10px 12px; font-family:'Inter',sans-serif; font-size:14px; outline:none; resize:vertical; }
+  input:focus, select:focus, textarea:focus{ border-color:var(--marigold); }
+  input::placeholder{ color:#5b6373; }
+  .submit-row{ grid-column:1 / -1; display:flex; justify-content:flex-end; margin-top:2px; }
+  button.go{ background:var(--marigold); color:#1A1304; border:none; font-weight:600; font-size:14px; padding:11px 22px; border-radius:100px; cursor:pointer; }
+  button.go:disabled{ opacity:.55; cursor:not-allowed; }
+
+  .status{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--muted); margin-bottom:16px; min-height:18px; }
+  .status.is-error{ color:var(--rust); }
+  .card{ background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:18px; margin-bottom:12px; }
+  .card__rank{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--marigold); margin-bottom:8px; }
+  .card__title{ font-family:'Fraunces',serif; font-size:17px; font-weight:600; margin-bottom:8px; }
+  .card__body{ font-size:14px; line-height:1.65; white-space:pre-wrap; }
+  .card__meta{ font-size:12px; color:var(--muted); border-top:1px solid var(--hairline); padding-top:10px; margin-top:10px; }
+  .empty{ text-align:center; color:var(--muted); font-size:13px; padding:26px 0; border:1px dashed var(--hairline); border-radius:var(--radius); }
+  @media (max-width:600px){ form{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Agent 10 · Content & Social</div>
+  <h1>Content & Social Studio</h1>
+  <p class="sub">Two real, working tools — SEO blog drafts and organic social captions, both call Claude live.</p>
+
+  <div class="eyebrow" style="margin-top:0;">Compliance category</div>
+  <select id="complianceCategory" style="margin-bottom:20px; background:var(--ink-soft); border:1px solid var(--hairline); color:var(--paper); border-radius:8px; padding:8px 12px; font-family:'Inter',sans-serif; font-size:13px;">
+    <option value="general">General (default)</option>
+    <option value="financial_services">Financial services</option>
+    <option value="healthcare">Healthcare</option>
+  </select>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="blog">SEO Blog Post</button>
+    <button class="tab" data-tab="social">Organic Social Post</button>
+  </div>
+
+  <!-- BLOG PANEL -->
+  <div class="panel active" id="panel-blog">
+    <form id="blogForm">
+      <div class="field"><label>Business name</label><input id="b-business" placeholder="Aura Dental Clinic" required></div>
+      <div class="field"><label>Target keyword/topic</label><input id="b-keyword" placeholder="best dentist for nervous patients" required></div>
+      <div class="field full"><label>Who this is for</label><input id="b-audience" placeholder="Adults nervous about dental visits, searching online" required></div>
+      <div class="field"><label>Tone</label><select id="b-tone"><option>Warm and reassuring</option><option>Professional and informative</option><option>Friendly and local</option></select></div>
+      <div class="field"><label>Length</label><select id="b-length"><option value="short">Short (~400 words)</option><option value="medium" selected>Medium (~700 words)</option></select></div>
+      <div class="submit-row"><button class="go" type="submit">Draft blog post</button></div>
+    </form>
+    <div class="status" id="blogStatus"></div>
+    <div id="blogResults"><div class="empty">No draft yet.</div></div>
+  </div>
+
+  <!-- SOCIAL PANEL -->
+  <div class="panel" id="panel-social">
+    <form id="socialForm">
+      <div class="field"><label>Business name</label><input id="s-business" placeholder="Aura Dental Clinic" required></div>
+      <div class="field"><label>What to post about</label><input id="s-topic" placeholder="Tip: why you shouldn't skip a 6-month checkup" required></div>
+      <div class="field"><label>Platform</label><select id="s-platform"><option>Instagram</option><option>Facebook</option><option>Both</option></select></div>
+      <div class="field"><label>Tone</label><select id="s-tone"><option>Friendly and local</option><option>Educational</option><option>Playful</option></select></div>
+      <div class="field full"><label>How many caption ideas</label><select id="s-count"><option value="3" selected>3</option><option value="5">5</option></select></div>
+      <div class="submit-row"><button class="go" type="submit">Generate captions</button></div>
+    </form>
+    <div class="status" id="socialStatus"></div>
+    <div id="socialResults"><div class="empty">No captions yet.</div></div>
+  </div>
+</div>
+
+<script>
+function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+
+async function checkComplianceForCard(elId, text) {
+  const badgeEl = document.getElementById(elId);
+  if (!badgeEl || !text) return;
+  const category = document.getElementById('complianceCategory').value;
+  try {
+    const response = await fetch('/api/compliance-check', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, category }),
+    });
+    const result = await response.json();
+    if (result.error) {
+      badgeEl.innerHTML = `<span style="color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;">Compliance check unavailable: ${escapeHtml(result.error)}</span>`;
+      return;
+    }
+    const isPass = (result.verdict || '').startsWith('PASS');
+    const color = isPass ? 'var(--sage)' : 'var(--rust)';
+    const icon = isPass ? '✓' : '⚠';
+    let html = `<span style="color:${color};font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;">${icon} Compliance: ${escapeHtml(result.verdict)}</span>`;
+    if (result.issues && result.issues.length) {
+      html += `<div style="font-size:11px;color:var(--muted);margin-top:4px;">${escapeHtml(result.issues.join('; '))}</div>`;
+    }
+    badgeEl.innerHTML = html;
+  } catch (err) {
+    badgeEl.innerHTML = `<span style="color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;">Compliance check failed: ${escapeHtml(err.message)}</span>`;
+  }
+}
+async function callClaude(prompt, maxTokens){
+  const response = await fetch("/api/generate", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: maxTokens, messages: [{ role: "user", content: prompt }] })
+  });
+  if (!response.ok) throw new Error('Request failed with status ' + response.status);
+  const data = await response.json();
+  return (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n');
+}
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+document.getElementById('blogForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const business = document.getElementById('b-business').value.trim();
+  const keyword = document.getElementById('b-keyword').value.trim();
+  const audience = document.getElementById('b-audience').value.trim();
+  const tone = document.getElementById('b-tone').value;
+  const length = document.getElementById('b-length').value === 'short' ? '400' : '700';
+  const statusEl = document.getElementById('blogStatus'); const resultsEl = document.getElementById('blogResults');
+  const btn = e.target.querySelector('button');
+  btn.disabled = true; statusEl.classList.remove('is-error'); statusEl.textContent = 'Drafting blog post...'; resultsEl.innerHTML = '';
+  const prompt = `Write an SEO-optimized blog post for "${business}" targeting the keyword/topic: "${keyword}".
+Audience: ${audience}. Tone: ${tone}. Length: about ${length} words.
+Include a compelling H1 title, naturally work the keyword into the first paragraph and at least
+one subheading, and end with a soft call-to-action to book with ${business}.
+Write in PLAIN TEXT only — no HTML tags like <p> or <h1>, no markdown symbols like ** or #.
+Use blank lines between paragraphs and plain capitalized text for subheadings instead.
+Respond with ONLY raw JSON, no markdown: {"title": "...", "body": "..."}`;
+  try {
+    const raw = await callClaude(prompt, 1500);
+    const cleaned = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+    const post = JSON.parse(cleaned);
+    statusEl.textContent = 'Draft ready — review before publishing.';
+    resultsEl.innerHTML = `<div class="card"><div class="card__rank">Draft</div>
+      <div class="card__title">${escapeHtml(post.title || '')}</div>
+      <div class="card__body">${escapeHtml(post.body || '')}</div>
+      <div class="card__meta" id="blogCompliance">Checking compliance...</div>
+      <div class="card__meta">SEO copy still needs a human pass for accuracy and brand fit before publishing.</div></div>`;
+    checkComplianceForCard('blogCompliance', (post.title || '') + ' ' + (post.body || ''));
+  } catch (err) {
+    statusEl.classList.add('is-error'); statusEl.textContent = 'Error: ' + err.message;
+    resultsEl.innerHTML = '<div class="empty">No results.</div>';
+  } finally { btn.disabled = false; }
+});
+
+document.getElementById('socialForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const business = document.getElementById('s-business').value.trim();
+  const topic = document.getElementById('s-topic').value.trim();
+  const platform = document.getElementById('s-platform').value;
+  const tone = document.getElementById('s-tone').value;
+  const count = document.getElementById('s-count').value;
+  const statusEl = document.getElementById('socialStatus'); const resultsEl = document.getElementById('socialResults');
+  const btn = e.target.querySelector('button');
+  btn.disabled = true; statusEl.classList.remove('is-error'); statusEl.textContent = 'Writing captions...'; resultsEl.innerHTML = '';
+  const prompt = `Write exactly ${count} organic ${platform} caption ideas for "${business}" about: "${topic}".
+Tone: ${tone}. These are organic posts, not paid ads — should feel native to the platform, include
+2-4 relevant hashtags, and a light call-to-action (comment/save/share, not "buy now").
+Respond with ONLY a raw JSON array, no markdown. Each item: {"caption": "..."}`;
+  try {
+    const raw = await callClaude(prompt, 800);
+    const cleaned = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+    const items = JSON.parse(cleaned);
+    statusEl.textContent = `${items.length} captions ready.`;
+    resultsEl.innerHTML = items.map((item, i) => `<div class="card"><div class="card__rank">Idea ${i+1}</div>
+      <div class="card__body">${escapeHtml(item.caption || '')}</div>
+      <div class="card__meta" id="socialCompliance-${i}">Checking compliance...</div></div>`).join('');
+    items.forEach((item, i) => checkComplianceForCard(`socialCompliance-${i}`, item.caption || ''));
+  } catch (err) {
+    statusEl.classList.add('is-error'); statusEl.textContent = 'Error: ' + err.message;
+    resultsEl.innerHTML = '<div class="empty">No results.</div>';
+  } finally { btn.disabled = false; }
+});
+</script>
+</body>
+</html>

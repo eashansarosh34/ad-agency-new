@@ -1,0 +1,38 @@
+{
+  "1635968067474458": {
+    "lead_id": "1635968067474458",
+    "name": "<test lead: dummy data for full_name>",
+    "phone": "<test lead: dummy data for phone_number>",
+    "status": "contacted",
+    "interest_service": null,
+    "last_reply": null,
+    "created_at": "2026-06-25T01:22:26.230514+00:00"
+  },
+  "3972792686363210": {
+    "lead_id": "3972792686363210",
+    "name": "Sarvesh Kumar Sarvesh Kumar",
+    "phone": "+19129780233",
+    "status": "contacted",
+    "interest_service": null,
+    "last_reply": null,
+    "created_at": "2026-06-25T13:03:27.087193+00:00"
+  },
+  "1294520826038155": {
+    "lead_id": "1294520826038155",
+    "name": "Anup Nishsd",
+    "phone": "+919838592059",
+    "status": "contacted",
+    "interest_service": null,
+    "last_reply": null,
+    "created_at": "2026-06-25T13:03:27.087243+00:00"
+  },
+  "2468506093667479": {
+    "lead_id": "2468506093667479",
+    "name": "Dipali Kharia",
+    "phone": "+919864942407",
+    "status": "contacted",
+    "interest_service": null,
+    "last_reply": null,
+    "created_at": "2026-06-25T13:03:27.087255+00:00"
+  }
+}

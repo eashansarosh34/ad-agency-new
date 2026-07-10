@@ -1,0 +1,42 @@
+name: Poll Leads
+
+# Runs every 15 minutes — GitHub itself recommends not going more frequent
+# than this for reliable scheduled workflows; 5-minute schedules are allowed
+# but commonly delayed under load. 15 minutes is still fast for lead response.
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:   # adds a manual "Run workflow" button in the Actions tab, for testing
+
+permissions:
+  contents: write   # needed so this workflow can commit the updated leads_db.json back
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests
+
+      - name: Run lead poller
+        env:
+          PAGE_ACCESS_TOKEN: ${{ secrets.PAGE_ACCESS_TOKEN }}
+          META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+          META_API_URL: ${{ secrets.META_API_URL }}   # leave unset/blank to use the real Meta API
+        run: python3 agent_04b_lead_poller.py
+
+      # leads_db.json gets written to by the script above. Since each run
+      # starts on a fresh machine, that file would be lost (and every lead
+      # would look "new" again next run) unless we save it back to the repo.
+      - name: Save updated lead state back to the repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add leads_db.json
+          git diff --staged --quiet || git commit -m "Update lead state [auto]"
+          git push

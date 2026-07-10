@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Performance Marketing Pricing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        darkBg: '#0f1117',
+                        cardBg: '#161922',
+                        goldAccent: '#E8A33D',
+                        borderGray: '#222630',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f1117;
+        }
+        /* Custom scrollbar for premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f1117;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222630;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E8A33D;
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-100 antialiased min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
+
+    <!-- Header & Glow Effects -->
+    <div class="relative overflow-hidden pt-16 pb-12 md:py-20 flex flex-col items-center justify-center text-center px-4">
+        <!-- Abstract gradient glows -->
+        <div class="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(232,163,61,0.06)_0%,transparent_70%)] pointer-events-none"></div>
+        
+        <div class="z-10 max-w-3xl">
+            <span class="text-xs font-bold tracking-[0.25em] text-goldAccent uppercase bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20">
+                AI-Powered Performance Marketing
+            </span>
+            <h1 class="mt-6 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+                Scale Your Acquisition <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-300 to-amber-500">Without the Bloat</span>
+            </h1>
+            <p class="mt-6 text-lg text-slate-400 max-w-xl mx-auto font-medium">
+                Real automation. Real reporting. No bloated content or management fees.
+            </p>
+
+            <!-- Toggle Switch -->
+            <div class="mt-10 flex items-center justify-center gap-4">
+                <span id="label-monthly" class="text-sm font-semibold text-white transition-colors duration-200">Billed Monthly</span>
+                <button id="billing-toggle" class="relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-borderGray" role="switch" aria-checked="false">
+                    <span id="toggle-knob" class="pointer-events-none inline-block h-6 w-6 transform rounded-full bg-goldAccent shadow ring-0 transition duration-200 ease-in-out translate-x-0"></span>
+                </button>
+                <span id="label-annual" class="text-sm font-semibold text-slate-400 transition-colors duration-200 flex items-center gap-1.5">
+                    Billed Annually
+                    <span class="text-[10px] font-bold text-black bg-goldAccent px-2 py-0.5 rounded-full uppercase tracking-wider">Save 15%</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Grid -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow pb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+            
+            <!-- CARD 1: STARTER -->
+            <div class="relative flex flex-col justify-between bg-cardBg border border-borderGray rounded-3xl p-8 transition-all duration-300 hover:border-slate-700 hover:translate-y-[-4px] group">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-300 text-xl border border-borderGray group-hover:bg-slate-700/50 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-rocket"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Tier 01</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white tracking-tight">Starter</h3>
+                    <p class="mt-2 text-sm text-slate-400">Perfect for businesses validating channels.</p>
+                    
+                    <div class="mt-6 flex items-baseline">
+                        <span class="text-5xl font-extrabold text-white tracking-tight font-mono">₹</span>
+                        <span id="price-starter" class="text-5xl font-extrabold text-white tracking-tight font-mono transition-all duration-300">14,999</span>
+                        <span class="text-slate-500 ml-2 text-sm font-semibold">/month</span>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="my-6 border-t border-borderGray/60"></div>
+
+                    <!-- Features -->
+                    <ul class="space-y-4 text-sm text-slate-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>One ad platform <strong class="text-white font-medium">(Meta or Google)</strong></span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>AI-generated ad creative & copy</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Automated weekly performance report</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Compliance & brand-safety check</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Budget Guardian <span class="text-xs text-slate-500">(auto-pause at limits)</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mt-8">
+                    <button class="w-full py-4 px-6 rounded-2xl bg-slate-800 text-white font-bold hover:bg-slate-700 hover:text-white border border-borderGray transition-all duration-200">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARD 2: GROWTH (MOST POPULAR) -->
+            <div class="relative flex flex-col justify-between bg-cardBg border-2 border-goldAccent rounded-3xl p-8 transition-all duration-300 hover:translate-y-[-4px] shadow-[0_20px_50px_rgba(232,163,61,0.05)]">
+                <!-- Most Popular Badge -->
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-goldAccent text-darkBg text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest">
+                    Most Popular
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-goldAccent text-xl border border-amber-500/20">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-goldAccent">Tier 02</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white tracking-tight">Growth</h3>
+                    <p class="mt-2 text-sm text-slate-400">Scale multi-channel acquisition paths easily.</p>
+                    
+                    <div class="mt-6 flex items-baseline">
+                        <span class="text-5xl font-extrabold text-white tracking-tight font-mono">₹</span>
+                        <span id="price-growth" class="text-5xl font-extrabold text-white tracking-tight font-mono transition-all duration-300">29,999</span>
+                        <span class="text-slate-500 ml-2 text-sm font-semibold">/month</span>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="my-6 border-t border-borderGray/60"></div>
+
+                    <!-- Features -->
+                    <ul class="space-y-4 text-sm text-slate-300">
+                        <li class="flex items-start gap-3 text-goldAccent font-semibold">
+                            <span><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Everything in Starter Included</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Meta + Google Ads combined</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Cross-channel budget optimization</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>WhatsApp instant lead qualifier</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Live client dashboard <span class="text-xs text-slate-500">(real-time)</span></span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Weekly plain-language WhatsApp brief</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mt-8">
+                    <button class="w-full py-4 px-6 rounded-2xl bg-goldAccent text-darkBg font-extrabold hover:bg-amber-400 hover:shadow-[0_10px_20px_rgba(232,163,61,0.15)] transition-all duration-200">
+                        Scale Up Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARD 3: PRO -->
+            <div class="relative flex flex-col justify-between bg-cardBg border border-borderGray rounded-3xl p-8 transition-all duration-300 hover:border-slate-700 hover:translate-y-[-4px] group">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-300 text-xl border border-borderGray group-hover:bg-slate-700/50 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Tier 03</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white tracking-tight">Pro</h3>
+                    <p class="mt-2 text-sm text-slate-400">Dominate search surfaces & secure churn risks.</p>
+                    
+                    <div class="mt-6 flex items-baseline">
+                        <span class="text-5xl font-extrabold text-white tracking-tight font-mono">₹</span>
+                        <span id="price-pro" class="text-5xl font-extrabold text-white tracking-tight font-mono transition-all duration-300">49,999</span>
+                        <span class="text-slate-500 ml-2 text-sm font-semibold">/month</span>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="my-6 border-t border-borderGray/60"></div>
+
+                    <!-- Features -->
+                    <ul class="space-y-4 text-sm text-slate-300">
+                        <li class="flex items-start gap-3 text-goldAccent font-semibold">
+                            <span><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Everything in Growth Included</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>AI search visibility <strong class="text-white font-medium">(ChatGPT, Gemini, Perplexity)</strong></span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Churn risk monitoring</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Offer & funnel diagnosis</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Human escalation layer for decisions</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-goldAccent mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>Dedicated strategist support</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mt-8">
+                    <button class="w-full py-4 px-6 rounded-2xl bg-slate-800 text-white font-bold hover:bg-slate-700 hover:text-white border border-borderGray transition-all duration-200">
+                        Upgrade to Pro
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Ad spend disclaimer / contract parameters -->
+        <p class="mt-12 text-center text-xs text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            Ad spend is billed separately, paid directly to Meta/Google. No 1-year lock-in requirements. 
+            Cancel anytime with a 30 days written notice limit.
+        </p>
+    </main>
+
+    <!-- Footer Logos -->
+    <footer class="w-full bg-darkBg border-t border-borderGray py-8 mt-auto z-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+                <span class="flex items-center gap-2"><i class="fa-brands fa-meta text-slate-400"></i> Meta Ads</span>
+                <span class="text-slate-700">•</span>
+                <span class="flex items-center gap-2"><i class="fa-brands fa-google text-slate-400"></i> Google Ads</span>
+                <span class="text-slate-700">•</span>
+                <span class="flex items-center gap-2"><i class="fa-brands fa-whatsapp text-slate-400"></i> WhatsApp Automation</span>
+                <span class="text-slate-700">•</span>
+                <span class="flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-slate-400"></i> AI Creative</span>
+                <span class="text-slate-700">•</span>
+                <span class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-slate-400"></i> Compliance Monitoring</span>
+                <span class="text-slate-700">•</span>
+                <span class="flex items-center gap-2"><i class="fa-solid fa-chart-column text-slate-400"></i> Live Reporting</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive script for dynamic billing calculation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.getElementById('billing-toggle');
+            const knob = document.getElementById('toggle-knob');
+            const labelMonthly = document.getElementById('label-monthly');
+            const labelAnnual = document.getElementById('label-annual');
+            
+            const priceStarter = document.getElementById('price-starter');
+            const priceGrowth = document.getElementById('price-growth');
+            const pricePro = document.getElementById('price-pro');
+
+            const prices = {
+                monthly: { starter: "14,999", growth: "29,999", pro: "49,999" },
+                annual: { starter: "12,749", growth: "25,499", pro: "42,499" } // ~15% off
+            };
+
+            let isAnnual = false;
+
+            const updatePricing = () => {
+                if (isAnnual) {
+                    knob.classList.replace('translate-x-0', 'translate-x-7');
+                    labelMonthly.classList.replace('text-white', 'text-slate-400');
+                    labelAnnual.classList.replace('text-slate-400', 'text-white');
+                    
+                    priceStarter.innerText = prices.annual.starter;
+                    priceGrowth.innerText = prices.annual.growth;
+                    pricePro.innerText = prices.annual.pro;
+                } else {
+                    knob.classList.replace('translate-x-7', 'translate-x-0');
+                    labelMonthly.classList.replace('text-slate-400', 'text-white');
+                    labelAnnual.classList.replace('text-white', 'text-slate-400');
+                    
+                    priceStarter.innerText = prices.monthly.starter;
+                    priceGrowth.innerText = prices.monthly.growth;
+                    pricePro.innerText = prices.monthly.pro;
+                }
+            };
+
+            toggle.addEventListener('click', () => {
+                isAnnual = !isAnnual;
+                updatePricing();
+            });
+        });
+    </script>
+</body>
+</html>

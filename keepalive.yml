@@ -1,0 +1,25 @@
+name: Keepalive
+
+# GitHub automatically disables ALL scheduled workflows in a repo if there's
+# no commit activity for 60 days. This workflow makes a tiny empty commit
+# twice a month specifically to prevent that — without it, everything above
+# could silently stop running someday and you wouldn't notice until a lead
+# went unanswered.
+on:
+  schedule:
+    - cron: '0 0 1,15 * *'   # the 1st and 15th of every month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "Keepalive: prevent 60-day inactivity auto-disable"
+          git push

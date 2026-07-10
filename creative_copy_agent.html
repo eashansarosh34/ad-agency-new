@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Creative & Copy Agent</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12161D;
+    --ink-soft:#1B212B;
+    --panel:#1E2530;
+    --panel-raised:#242C38;
+    --hairline:rgba(241,237,227,0.09);
+    --paper:#F1EDE3;
+    --muted:#8B93A1;
+    --marigold:#E8A33D;
+    --marigold-soft:rgba(232,163,61,0.16);
+    --sage:#7FA37A;
+    --rust:#C97B5F;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:760px; margin:0 auto; padding:32px 20px 60px; }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--marigold);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:30px;
+    margin:0 0 6px;
+    letter-spacing:-0.01em;
+  }
+  .sub{ color:var(--muted); font-size:14px; margin:0 0 28px; }
+
+  form{
+    background:var(--panel);
+    border:1px solid var(--hairline);
+    border-radius:var(--radius);
+    padding:22px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:28px;
+  }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field.full{ grid-column:1 / -1; }
+  label{
+    font-size:12px;
+    color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  input, select{
+    background:var(--ink-soft);
+    border:1px solid var(--hairline);
+    color:var(--paper);
+    border-radius:8px;
+    padding:10px 12px;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    outline:none;
+  }
+  input:focus, select:focus{ border-color:var(--marigold); }
+  input::placeholder{ color:#5b6373; }
+
+  .submit-row{ grid-column:1 / -1; display:flex; justify-content:flex-end; margin-top:4px; }
+  button{
+    background:var(--marigold);
+    color:#1A1304;
+    border:none;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    padding:11px 22px;
+    border-radius:100px;
+    cursor:pointer;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  button:hover{ transform:translateY(-1px); }
+  button:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+  button:focus-visible{ outline:2px solid var(--paper); outline-offset:2px; }
+
+  .status{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:18px;
+    min-height:18px;
+  }
+  .status.is-error{ color:var(--rust); }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--hairline);
+    border-radius:var(--radius);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .card__rank{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--marigold);
+  }
+  .card__headline{
+    font-family:'Fraunces',serif;
+    font-size:18px;
+    font-weight:600;
+    line-height:1.3;
+  }
+  .card__body{ font-size:13.5px; color:var(--paper); line-height:1.55; }
+  .card__cta{
+    display:inline-block;
+    width:fit-content;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--sage);
+    background:var(--marigold-soft);
+    padding:5px 10px;
+    border-radius:100px;
+    color:var(--marigold);
+  }
+  .card__visual{
+    font-size:12px;
+    color:var(--muted);
+    border-top:1px solid var(--hairline);
+    padding-top:10px;
+    margin-top:2px;
+  }
+  .card__visual b{ color:var(--paper); font-weight:500; }
+
+  .empty{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    padding:30px 0;
+    border:1px dashed var(--hairline);
+    border-radius:var(--radius);
+  }
+
+  @media (max-width:600px){
+    form{ grid-template-columns:1fr; }
+    .grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Agent 01 · Creative & Copy</div>
+  <h1>Ad Creative & Copy Agent</h1>
+  <p class="sub">Fill in one client's brief once. The agent writes a full first batch of ad copy — this is a real call to Claude, not sample text.</p>
+
+  <form id="briefForm">
+    <div class="field full">
+      <label for="format">Format</label>
+      <select id="format">
+        <option value="social">Social Ad (Meta/Instagram)</option>
+        <option value="display">Display Banner (Google)</option>
+        <option value="video">Video Script (Reels/YouTube Shorts)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="business">Business name</label>
+      <input id="business" placeholder="Aura Dental Clinic" required>
+    </div>
+    <div class="field">
+      <label for="service">Service / offer to promote</label>
+      <input id="service" placeholder="Free consultation for implants" required>
+    </div>
+    <div class="field full">
+      <label for="audience">Who this is for (one line)</label>
+      <input id="audience" placeholder="Adults 25–45 nearby who are nervous about dental visits" required>
+    </div>
+    <div class="field">
+      <label for="tone">Tone</label>
+      <select id="tone">
+        <option>Warm and reassuring</option>
+        <option>Bold and urgent</option>
+        <option>Premium and calm</option>
+        <option>Friendly and local</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="complianceCategory">Compliance category</label>
+      <select id="complianceCategory">
+        <option value="general">General (default)</option>
+        <option value="financial_services">Financial services</option>
+        <option value="healthcare">Healthcare</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="count">How many variations</label>
+      <select id="count">
+        <option value="3">3</option>
+        <option value="4" selected>4</option>
+        <option value="6">6</option>
+      </select>
+    </div>
+    <div class="submit-row">
+      <button id="genBtn" type="submit">Generate creative batch</button>
+    </div>
+  </form>
+
+  <div class="status" id="status"></div>
+  <div id="results">
+    <div class="empty">No batch generated yet — fill in the brief above and run the agent.</div>
+  </div>
+
+</div>
+
+<script>
+const form = document.getElementById('briefForm');
+const statusEl = document.getElementById('status');
+const resultsEl = document.getElementById('results');
+const btn = document.getElementById('genBtn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const format = document.getElementById('format').value;
+  const business = document.getElementById('business').value.trim();
+  const service = document.getElementById('service').value.trim();
+  const audience = document.getElementById('audience').value.trim();
+  const tone = document.getElementById('tone').value;
+  const count = document.getElementById('count').value;
+
+  btn.disabled = true;
+  statusEl.classList.remove('is-error');
+  statusEl.textContent = 'Agent is writing the batch...';
+  resultsEl.innerHTML = '';
+
+  const baseContext = `You are a performance ad copywriter for a local services business in India.
+Business: ${business}
+Service/offer to promote: ${service}
+Target audience: ${audience}
+Tone: ${tone}`;
+
+  let prompt;
+  if (format === 'display') {
+    prompt = `${baseContext}
+
+Write exactly ${count} distinct Google Display banner ad concepts. Each must take a genuinely
+different angle (urgency, social proof, before/after, myth-busting, direct offer).
+
+Respond with ONLY a raw JSON array, no markdown. Each element exactly:
+"headline" (string, under 5 words — Display headlines are very short),
+"description" (string, under 12 words),
+"cta" (string, short button label),
+"recommended_sizes" (array of strings — pick from "300x250","728x90","320x50","160x600","300x600","970x250"),
+"visual_direction" (string, one sentence describing the image to design at those sizes).`;
+  } else if (format === 'video') {
+    prompt = `${baseContext}
+
+Write exactly ${count} distinct short-form video ad scripts (Reels/YouTube Shorts style, 15-30
+seconds each). Each must take a genuinely different angle.
+
+Respond with ONLY a raw JSON array, no markdown. Each element exactly:
+"concept_name" (string, short label for this concept),
+"duration_seconds" (number, 15 or 30),
+"cta" (string, short spoken or on-screen call-to-action),
+"scenes" (array of objects, each: "time" (e.g. "0-3s"), "visual" (what's shown/filmed),
+"text_overlay_or_voiceover" (the words on screen or spoken)) — break the script into
+4-6 scenes covering the full duration.`;
+  } else {
+    prompt = `${baseContext}
+
+Write exactly ${count} distinct ad creative concepts for Meta (Facebook/Instagram) lead ads. Each must take a genuinely different angle (e.g. urgency, social proof, before/after, myth-busting, direct offer) — do not just reword the same idea.
+
+Respond with ONLY a raw JSON array, no markdown fences, no preamble, no explanation. Each element must be an object with exactly these keys:
+"headline" (string, under 8 words),
+"primary_text" (string, 2-3 short sentences, the main ad copy),
+"cta" (string, a short call-to-action button label),
+"visual_direction" (string, one sentence describing what the image or video should show).`;
+  }
+
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Request failed with status ' + response.status);
+    }
+
+    const data = await response.json();
+    const textBlocks = (data.content || [])
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('\n');
+
+    const cleaned = textBlocks.replace(/```json/g, '').replace(/```/g, '').trim();
+    const items = JSON.parse(cleaned);
+
+    statusEl.textContent = `Batch ready — ${items.length} concepts generated. Checking compliance...`;
+
+    resultsEl.innerHTML = '<div class="grid"></div>';
+    const grid = resultsEl.querySelector('.grid');
+    const category = document.getElementById('complianceCategory').value;
+
+    items.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const badgeHtml = `<div class="card__visual" id="compliance-${i}" style="border-top:none;padding-top:0;">
+        <span style="color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;">Checking compliance...</span>
+      </div>`;
+
+      if (format === 'display') {
+        card.innerHTML = `
+          <div class="card__rank">Concept ${i + 1}</div>
+          <div class="card__headline">${escapeHtml(item.headline || '')}</div>
+          <div class="card__body">${escapeHtml(item.description || '')}</div>
+          <div class="card__cta">${escapeHtml(item.cta || '')}</div>
+          <div class="card__visual"><b>Design at these sizes:</b> ${(item.recommended_sizes || []).join(', ')}</div>
+          <div class="card__visual"><b>Visual direction:</b> ${escapeHtml(item.visual_direction || '')}</div>
+          ${badgeHtml}
+        `;
+      } else if (format === 'video') {
+        const scenesHtml = (item.scenes || []).map(s =>
+          `<div style="margin-bottom:6px;"><b>${escapeHtml(s.time || '')}</b> — ${escapeHtml(s.visual || '')}<br><i>${escapeHtml(s.text_overlay_or_voiceover || '')}</i></div>`
+        ).join('');
+        card.innerHTML = `
+          <div class="card__rank">Concept ${i + 1} · ${item.duration_seconds || ''}s</div>
+          <div class="card__headline">${escapeHtml(item.concept_name || '')}</div>
+          <div class="card__visual" style="border-top:none; padding-top:0;">${scenesHtml}</div>
+          <div class="card__cta">${escapeHtml(item.cta || '')}</div>
+          ${badgeHtml}
+        `;
+      } else {
+        card.innerHTML = `
+          <div class="card__rank">Concept ${i + 1}</div>
+          <div class="card__headline">${escapeHtml(item.headline || '')}</div>
+          <div class="card__body">${escapeHtml(item.primary_text || '')}</div>
+          <div class="card__cta">${escapeHtml(item.cta || '')}</div>
+          <div class="card__visual"><b>Visual direction:</b> ${escapeHtml(item.visual_direction || '')}</div>
+          ${badgeHtml}
+        `;
+      }
+      grid.appendChild(card);
+
+      const textToCheck = item.primary_text || item.description ||
+        (item.scenes ? item.scenes.map(s => s.text_overlay_or_voiceover).join(' ') : '') || item.headline || '';
+      checkComplianceForCard(i, textToCheck, category);
+    });
+
+    statusEl.textContent = `Batch ready — ${items.length} concepts generated.`;
+
+
+  } catch (err) {
+    statusEl.classList.add('is-error');
+    statusEl.textContent = 'Something went wrong generating this batch: ' + err.message + '. Try again.';
+    resultsEl.innerHTML = '<div class="empty">No results to show.</div>';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+async function checkComplianceForCard(index, text, category) {
+  const badgeEl = document.getElementById(`compliance-${index}`);
+  if (!badgeEl || !text) return;
+  try {
+    const response = await fetch('/api/compliance-check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, category }),
+    });
+    const result = await response.json();
+    if (result.error) {
+      badgeEl.innerHTML = `<span style="color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;">Compliance check unavailable: ${escapeHtml(result.error)}</span>`;
+      return;
+    }
+    const isPass = (result.verdict || '').startsWith('PASS');
+    const color = isPass ? 'var(--sage)' : 'var(--rust)';
+    const icon = isPass ? '✓' : '⚠';
+    let html = `<span style="color:${color};font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;">${icon} Compliance: ${escapeHtml(result.verdict)}</span>`;
+    if (result.issues && result.issues.length) {
+      html += `<div style="font-size:11px;color:var(--muted);margin-top:4px;">${escapeHtml(result.issues.join('; '))}</div>`;
+    }
+    badgeEl.innerHTML = html;
+  } catch (err) {
+    badgeEl.innerHTML = `<span style="color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;">Compliance check failed: ${escapeHtml(err.message)}</span>`;
+  }
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>

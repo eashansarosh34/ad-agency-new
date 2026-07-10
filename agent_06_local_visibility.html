@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Local Visibility Assistant</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12161D; --ink-soft:#1B212B; --panel:#1E2530; --panel-raised:#242C38;
+    --hairline:rgba(241,237,227,0.09); --paper:#F1EDE3; --muted:#8B93A1;
+    --marigold:#E8A33D; --marigold-soft:rgba(232,163,61,0.16);
+    --sage:#7FA37A; --sage-soft:rgba(127,163,122,0.14); --rust:#C97B5F; --radius:14px;
+  }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:760px; margin:0 auto; padding:32px 20px 60px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; color:var(--marigold); text-transform:uppercase; margin-bottom:10px; }
+  h1{ font-family:'Fraunces',serif; font-weight:600; font-size:28px; margin:0 0 6px; letter-spacing:-0.01em; }
+  .sub{ color:var(--muted); font-size:14px; margin:0 0 24px; }
+
+  .tabs{ display:flex; gap:8px; margin-bottom:22px; border-bottom:1px solid var(--hairline); }
+  .tab{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--muted); background:none; border:none; padding:10px 4px; cursor:pointer; border-bottom:2px solid transparent; }
+  .tab.active{ color:var(--marigold); border-bottom-color:var(--marigold); }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+
+  form{ background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:22px; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field.full{ grid-column:1 / -1; }
+  label{ font-size:12px; color:var(--muted); font-family:'IBM Plex Mono',monospace; }
+  input, select, textarea{ background:var(--ink-soft); border:1px solid var(--hairline); color:var(--paper); border-radius:8px; padding:10px 12px; font-family:'Inter',sans-serif; font-size:14px; outline:none; resize:vertical; }
+  input:focus, select:focus, textarea:focus{ border-color:var(--marigold); }
+  input::placeholder, textarea::placeholder{ color:#5b6373; }
+
+  .submit-row{ grid-column:1 / -1; display:flex; justify-content:flex-end; margin-top:2px; }
+  button.go{ background:var(--marigold); color:#1A1304; border:none; font-family:'Inter',sans-serif; font-weight:600; font-size:14px; padding:11px 22px; border-radius:100px; cursor:pointer; transition:transform .15s ease, opacity .15s ease; }
+  button.go:hover{ transform:translateY(-1px); }
+  button.go:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+
+  .status{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--muted); margin-bottom:16px; min-height:18px; }
+  .status.is-error{ color:var(--rust); }
+
+  .card{ background:var(--panel); border:1px solid var(--hairline); border-radius:var(--radius); padding:18px; display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+  .card__rank{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--marigold); }
+  .card__body{ font-size:14px; color:var(--paper); line-height:1.6; }
+  .card__meta{ font-size:12px; color:var(--muted); border-top:1px solid var(--hairline); padding-top:10px; margin-top:2px; }
+  .copy-btn{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--marigold); background:var(--marigold-soft); padding:5px 10px; border-radius:100px; border:none; cursor:pointer; width:fit-content; }
+
+  .empty{ text-align:center; color:var(--muted); font-size:13px; padding:26px 0; border:1px dashed var(--hairline); border-radius:var(--radius); }
+
+  @media (max-width:600px){ form{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Agent 06 · Local Visibility</div>
+  <h1>Local Visibility Assistant</h1>
+  <p class="sub">Two real, working tools for Google Business Profile — both call Claude live, no mock data.</p>
+
+  <div class="eyebrow" style="margin-top:0;">Compliance category</div>
+  <select id="complianceCategory" style="margin-bottom:20px; background:var(--ink-soft); border:1px solid var(--hairline); color:var(--paper); border-radius:8px; padding:8px 12px; font-family:'Inter',sans-serif; font-size:13px;">
+    <option value="general">General (default)</option>
+    <option value="financial_services">Financial services</option>
+    <option value="healthcare">Healthcare</option>
+  </select>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="review">Review Response</button>
+    <button class="tab" data-tab="post">GBP Post Ideas</button>
+  </div>
+
+  <!-- REVIEW RESPONSE PANEL -->
+  <div class="panel active" id="panel-review">
+    <form id="reviewForm">
+      <div class="field"><label for="r-business">Business name</label><input id="r-business" placeholder="Aura Dental Clinic" required></div>
+      <div class="field"><label for="r-rating">Star rating</label>
+        <select id="r-rating">
+          <option value="5">5 stars</option>
+          <option value="4">4 stars</option>
+          <option value="3">3 stars</option>
+          <option value="2">2 stars</option>
+          <option value="1">1 star</option>
+        </select>
+      </div>
+      <div class="field full"><label for="r-text">The review text (paste it as-is)</label>
+        <textarea id="r-text" rows="3" placeholder="Great experience, Dr. Mehta was so gentle and explained everything clearly!" required></textarea>
+      </div>
+      <div class="field"><label for="r-tone">Tone</label>
+        <select id="r-tone">
+          <option>Warm and personal</option>
+          <option>Professional and concise</option>
+          <option>Friendly and local</option>
+        </select>
+      </div>
+      <div class="submit-row" style="grid-column: 2; align-self:end;">
+        <button class="go" type="submit">Draft response</button>
+      </div>
+    </form>
+    <div class="status" id="reviewStatus"></div>
+    <div id="reviewResults"><div class="empty">No response drafted yet.</div></div>
+  </div>
+
+  <!-- GBP POST IDEAS PANEL -->
+  <div class="panel" id="panel-post">
+    <form id="postForm">
+      <div class="field"><label for="p-business">Business name</label><input id="p-business" placeholder="Aura Dental Clinic" required></div>
+      <div class="field"><label for="p-highlight">What to highlight</label><input id="p-highlight" placeholder="Free consultation this weekend" required></div>
+      <div class="field full"><label for="p-audience">Who's this for (one line)</label><input id="p-audience" placeholder="Local patients nervous about dental visits" required></div>
+      <div class="field"><label for="p-tone">Tone</label>
+        <select id="p-tone">
+          <option>Friendly and local</option>
+          <option>Professional</option>
+          <option>Warm and reassuring</option>
+        </select>
+      </div>
+      <div class="field"><label for="p-count">How many ideas</label>
+        <select id="p-count"><option value="3" selected>3</option><option value="5">5</option></select>
+      </div>
+      <div class="submit-row">
+        <button class="go" type="submit">Generate post ideas</button>
+      </div>
+    </form>
+    <div class="status" id="postStatus"></div>
+    <div id="postResults"><div class="empty">No post ideas generated yet.</div></div>
+  </div>
+
+</div>
+
+<script>
+function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+
+async function checkComplianceForCard(elId, text) {
+  const badgeEl = document.getElementById(elId);
+  if (!badgeEl || !text) return;
+  const category = document.getElementById('complianceCategory').value;
+  try {
+    const response = await fetch('/api/compliance-check', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, category }),
+    });
+    const result = await response.json();
+    if (result.error) {
+      badgeEl.innerHTML = `<span style="color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;">Compliance check unavailable: ${escapeHtml(result.error)}</span>`;
+      return;
+    }
+    const isPass = (result.verdict || '').startsWith('PASS');
+    const color = isPass ? 'var(--sage)' : 'var(--rust)';
+    const icon = isPass ? '✓' : '⚠';
+    let html = `<span style="color:${color};font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;">${icon} Compliance: ${escapeHtml(result.verdict)}</span>`;
+    if (result.issues && result.issues.length) {
+      html += `<div style="font-size:11px;color:var(--muted);margin-top:4px;">${escapeHtml(result.issues.join('; '))}</div>`;
+    }
+    badgeEl.innerHTML = html;
+  } catch (err) {
+    badgeEl.innerHTML = `<span style="color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;">Compliance check failed: ${escapeHtml(err.message)}</span>`;
+  }
+}
+
+async function callClaude(prompt, maxTokens){
+  const response = await fetch("/api/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: maxTokens, messages: [{ role: "user", content: prompt }] })
+  });
+  if (!response.ok) throw new Error('Request failed with status ' + response.status);
+  const data = await response.json();
+  return (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n');
+}
+
+// Tabs
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// Review response
+document.getElementById('reviewForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const business = document.getElementById('r-business').value.trim();
+  const rating = document.getElementById('r-rating').value;
+  const text = document.getElementById('r-text').value.trim();
+  const tone = document.getElementById('r-tone').value;
+  const statusEl = document.getElementById('reviewStatus');
+  const resultsEl = document.getElementById('reviewResults');
+  const btn = e.target.querySelector('button');
+
+  btn.disabled = true; statusEl.classList.remove('is-error'); statusEl.textContent = 'Drafting response...';
+  resultsEl.innerHTML = '';
+
+  const prompt = `You are responding, on behalf of "${business}", to a real Google Business Profile review.
+Star rating: ${rating}/5
+Review text: "${text}"
+Tone: ${tone}
+
+Write ONE specific, warm reply (3-4 sentences max) that references something concrete from
+the review (don't be generic). If rating is 3 or below, acknowledge the concern directly and
+offer to make it right offline, without being defensive. Respond with ONLY the reply text,
+no preamble, no quotation marks around it.`;
+
+  try {
+    const reply = await callClaude(prompt, 300);
+    statusEl.textContent = 'Response ready — review before posting.';
+    resultsEl.innerHTML = `<div class="card">
+      <div class="card__rank">Draft reply</div>
+      <div class="card__body" id="reviewReplyText">${escapeHtml(reply.trim())}</div>
+      <div class="card__meta" id="reviewCompliance">Checking compliance...</div>
+      <div class="card__meta">Always read before posting — this is a draft, not an auto-send.</div>
+    </div>`;
+    checkComplianceForCard('reviewCompliance', reply.trim());
+  } catch (err) {
+    statusEl.classList.add('is-error');
+    statusEl.textContent = 'Something went wrong: ' + err.message + '. Try again.';
+    resultsEl.innerHTML = '<div class="empty">No results to show.</div>';
+  } finally { btn.disabled = false; }
+});
+
+// GBP post ideas
+document.getElementById('postForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const business = document.getElementById('p-business').value.trim();
+  const highlight = document.getElementById('p-highlight').value.trim();
+  const audience = document.getElementById('p-audience').value.trim();
+  const tone = document.getElementById('p-tone').value;
+  const count = document.getElementById('p-count').value;
+  const statusEl = document.getElementById('postStatus');
+  const resultsEl = document.getElementById('postResults');
+  const btn = e.target.querySelector('button');
+
+  btn.disabled = true; statusEl.classList.remove('is-error'); statusEl.textContent = 'Writing post ideas...';
+  resultsEl.innerHTML = '';
+
+  const prompt = `Write exactly ${count} Google Business Profile post ideas for "${business}".
+Highlight: ${highlight}
+Audience: ${audience}
+Tone: ${tone}
+
+Each post must be under 1500 characters but written to be effective when truncated after
+roughly 250 characters (GBP shows a "read more" cutoff there) — front-load the value. Each
+must end with a short call-to-action.
+
+Respond with ONLY a raw JSON array, no markdown. Each item: {"post_text": "..."}`;
+
+  try {
+    const raw = await callClaude(prompt, 800);
+    const cleaned = raw.replace(/```json/g, '').replace(/```/g, '').trim();
+    const items = JSON.parse(cleaned);
+    statusEl.textContent = `${items.length} post ideas ready.`;
+    resultsEl.innerHTML = items.map((item, i) =>
+      `<div class="card">
+        <div class="card__rank">Idea ${i + 1}</div>
+        <div class="card__body">${escapeHtml(item.post_text || '')}</div>
+        <div class="card__meta" id="postCompliance-${i}">Checking compliance...</div>
+      </div>`
+    ).join('');
+    items.forEach((item, i) => checkComplianceForCard(`postCompliance-${i}`, item.post_text || ''));
+  } catch (err) {
+    statusEl.classList.add('is-error');
+    statusEl.textContent = 'Something went wrong: ' + err.message + '. Try again.';
+    resultsEl.innerHTML = '<div class="empty">No results to show.</div>';
+  } finally { btn.disabled = false; }
+});
+</script>
+</body>
+</html>
