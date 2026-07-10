@@ -49,7 +49,7 @@ MIN_GAP_TO_ACT = 0.30          # only act if one platform's CPL is 30%+ cheaper 
 SHIFT_PCT_PER_CYCLE = 0.15     # move at most 15% of the pricier platform's budget per run — capped, deliberate
 LOG_FILE = "agent_13_actions.json"
 
-DRY_RUN = True  # <-- flip to False only once you trust this on real accounts
+DRY_RUN = os.environ.get("ORCHESTRATOR_DRY_RUN", "true").lower() != "false"  # controlled via GitHub Secret
 
 
 # ----------------------------------------------------------------------------
