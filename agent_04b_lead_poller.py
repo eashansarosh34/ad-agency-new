@@ -32,7 +32,7 @@ PAGE_ID = os.environ.get("META_PAGE_ID", "1260680110451105")
 GRAPH_URL = os.environ.get("META_API_URL", "https://graph.facebook.com/v21.0")
 LEADS_DB_PATH = os.environ.get("LEADS_DB_PATH", "leads_db.json")
 
-DRY_RUN = True  # <-- flip to False only once you trust this on a real account
+DRY_RUN = os.environ.get("ORCHESTRATOR_DRY_RUN", "true").lower() != "false"  # controlled via GitHub Secret
 
 
 def load_leads():
