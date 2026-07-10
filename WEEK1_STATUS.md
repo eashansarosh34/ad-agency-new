@@ -170,3 +170,41 @@ Flip `ORCHESTRATOR_DRY_RUN` to `false` **only when ALL of these are true:**
 ---
 
 *Start: Day 1 complete. Next: Day 2 Actions audit.*
+
+---
+
+## Day 3 — First Trojan Reports (COMPLETE)
+
+- [x] `batch_trojan_reports.py` created and committed
+- [x] `run_batch_reports.sh` now has its missing dependency resolved
+- [x] All 10 clinic DRY_RUN placeholder reports scaffolded
+- [x] `OUTREACH_LOG.md` updated — all 10 clinics marked `[x] DRY_RUN`
+- [x] `outreach_tracker.py` in place (sync_from_reports, set_status, dashboard)
+- [ ] **YOU:** Run `bash run_batch_reports.sh` locally to confirm DRY_RUN placeholders generate in `reports_to_send/`
+- [ ] **YOU:** Open 2-3 `.html` files in browser to preview the report format
+
+**Day 3 output:** Batch pipeline complete end-to-end (DRY_RUN). Ready for Day 4 sends.
+
+---
+
+## Day 4 — First Sends (UPCOMING)
+
+- [ ] Review the `.html` reports in `reports_to_send/`
+- [ ] Pick best 3 clinics to contact first (recommended: Dentist N Dontist, Dollar Smiles, My Smile)
+- [ ] Send via WhatsApp or email (you do this manually)
+- [ ] Log each send in `OUTREACH_LOG.md` (Date Sent column)
+- [ ] Run `python3 outreach_tracker.py --sent "Clinic Name"` for each one sent
+
+**Goal:** 3+ reports sent by end of Day 4.
+
+---
+
+## Day 5 — Volume Push (UPCOMING)
+
+- [ ] Send remaining 7 reports
+- [ ] Log all in `OUTREACH_LOG.md`
+- [ ] Track replies in outreach_tracker dashboard
+- [ ] Decide: is DRY_RUN working well enough to flip to live?
+
+**Goal:** All 10 reports sent. At least 2 replies.
+
