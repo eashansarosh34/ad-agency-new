@@ -18,4 +18,5 @@ jobs:
         env:
           META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
           META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+                    ORCHESTRATOR_DRY_RUN: ${{ secrets.ORCHESTRATOR_DRY_RUN }}
         run: python3 agent_02_media_optimizer.py
