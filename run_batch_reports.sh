@@ -1,145 +1,53 @@
 #!/bin/bash
 # ============================================================
-# BATCH TROJAN REPORT RUNNER — 10 Hyderabad Dental Clinics
-# Run this from your local agent files folder
+# run_batch_reports.sh — one-step Trojan Report launcher
 # ============================================================
+# Double-click this (or run: bash run_batch_reports.sh) to
+# generate all your prospect reports in one go.
 #
-# BEFORE RUNNING:
-# 1. Open Terminal in your agent files folder
-# 2. Set your API keys (one-time per session):
-#    export ANTHROPIC_API_KEY=your-anthropic-key
-#    export TAVILY_API_KEY=your-tavily-key
-# 3. Run this script:
-#    bash run_batch_reports.sh
-#
-# Takes ~2-3 minutes per report. All 10 = ~25 minutes.
-# Reports saved in the same folder as this script.
+# FIRST TIME SETUP: open this file in any text editor and paste
+# your two keys between the quotes below, then save. You only
+# do this once.
 # ============================================================
 
-echo "================================================"
-echo " TROJAN REPORT BATCH — 10 Hyderabad Dental Clinics"
-echo " Start time: $(date)"
-echo "================================================"
+# ---- PASTE YOUR KEYS HERE (between the quotes) ----
+export ANTHROPIC_API_KEY=""
+export TAVILY_API_KEY=""
+# ---------------------------------------------------
+
+# Optional: your Meta creds, only needed if a report should pull live account data.
+# Leave blank otherwise — reports work fine without them.
+export META_ACCESS_TOKEN="${META_ACCESS_TOKEN:-}"
+export META_AD_ACCOUNT_ID="${META_AD_ACCOUNT_ID:-}"
+
+echo "============================================"
+echo " Apna Marketer — Batch Report Generator"
+echo "============================================"
 echo ""
 
-# Clinic 1 — Dentist N Dontist, Jubilee Hills
-echo "[1/10] Running: Dentist N Dontist, Jubilee Hills..."
-python3 trojan_report.py \
-  --business "Dentist N Dontist" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --website "https://dentistndontist.com" \
-  --html
-echo "  DONE. Check trojan_report_DentistNDontist.txt / .html"
-echo ""
+# Sanity check: are keys set?
+if [ -z "$ANTHROPIC_API_KEY" ]; then
+  echo "NOTE: No Anthropic key set. Reports will still generate using the"
+  echo "      built-in benchmarks, but without the AI-written sections."
+  echo "      To add keys, open this file in a text editor and paste them at the top."
+  echo ""
+fi
 
-# Clinic 2 — Dollar Smiles Dental Hospital, Gachibowli
-echo "[2/10] Running: Dollar Smiles Dental Hospital, Gachibowli..."
-python3 trojan_report.py \
-  --business "Dollar Smiles Dental Hospital" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --website "https://dollarsmiles.com" \
-  --html
-echo "  DONE. Check trojan_report_DollarSmiles.txt / .html"
-echo ""
+# Make sure the batch script is here
+if [ ! -f "batch_trojan_reports.py" ]; then
+  echo "ERROR: batch_trojan_reports.py not found in this folder."
+  echo "Make sure you're running this from your agent files folder."
+  exit 1
+fi
 
-# Clinic 3 — My Smile Dental, Nallagandla
-echo "[3/10] Running: My Smile Dental, Nallagandla..."
-python3 trojan_report.py \
-  --business "My Smile Dental" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --website "https://mysmiledental.co.in" \
-  --html
-echo "  DONE. Check trojan_report_MySmileDental.txt / .html"
-echo ""
+# Run it
+python3 batch_trojan_reports.py
 
-# Clinic 4 — Nihaans Dental Clinic, Gachibowli (Instagram only)
-echo "[4/10] Running: Nihaans Dental Clinic, Gachibowli..."
-python3 trojan_report.py \
-  --business "Nihaans Dental Clinic" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --html
-echo "  DONE. Check trojan_report_NihaansDental.txt / .html"
 echo ""
-
-# Clinic 5 — Toothway Dental Clinic, Gachibowli (Instagram only)
-echo "[5/10] Running: Toothway Dental Clinic, Gachibowli..."
-python3 trojan_report.py \
-  --business "Toothway Dental Clinic" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --html
-echo "  DONE. Check trojan_report_ToothwayDental.txt / .html"
-echo ""
-
-# Clinic 6 — Roots Dental Care, Jubilee Hills
-echo "[6/10] Running: Roots Dental Care, Jubilee Hills..."
-python3 trojan_report.py \
-  --business "Roots Dental Care" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --website "https://www.rootsdentalcare.co.in" \
-  --html
-echo "  DONE. Check trojan_report_RootsDental.txt / .html"
-echo ""
-
-# Clinic 7 — Capital Dental Care, Kondapur (no website)
-echo "[7/10] Running: Capital Dental Care, Kondapur..."
-python3 trojan_report.py \
-  --business "Capital Dental Care" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --html
-echo "  DONE. Check trojan_report_CapitalDental.txt / .html"
-echo ""
-
-# Clinic 8 — Smylexl Dental Clinic, Hyderabad (no website)
-echo "[8/10] Running: Smylexl Dental Clinic..."
-python3 trojan_report.py \
-  --business "Smylexl Dental Clinic" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --html
-echo "  DONE. Check trojan_report_SmylexlDental.txt / .html"
-echo ""
-
-# Clinic 9 — GA Dental Clinic, Malakpet (no website)
-echo "[9/10] Running: GA Dental Clinic, Malakpet..."
-python3 trojan_report.py \
-  --business "GA Dental Clinic" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --html
-echo "  DONE. Check trojan_report_GADental.txt / .html"
-echo ""
-
-# Clinic 10 — Just Smile Dental Care, Miyapur (no website)
-echo "[10/10] Running: Just Smile Dental Care, Miyapur..."
-python3 trojan_report.py \
-  --business "Just Smile Dental Care" \
-  --niche "dental clinic" \
-  --city "Hyderabad" \
-  --html
-echo "  DONE. Check trojan_report_JustSmile.txt / .html"
-echo ""
-
-echo "================================================"
-echo " ALL 10 REPORTS COMPLETE"
-echo " End time: $(date)"
-echo "================================================"
-echo ""
-echo "NEXT STEPS:"
-echo "1. Open each .html file in your browser (double-click it)"
-echo "2. Read the report — does it sound useful to a dentist?"
-echo "3. Open OUTREACH_LOG.md and log which ones you send"
-echo "4. WhatsApp message template is in CLINIC_TARGETS.md"
-echo ""
-echo "Send message:"
-echo '  "Hi, I work in digital marketing in Hyderabad and took a quick'
-echo '  look at how [Clinic Name] is showing up online. Put together a'
-echo '  few honest observations — free, no catch. Sharing in case it is'
-echo '  useful to you either way." [paste .txt report or attach .html PDF]'
-echo ""
+echo "============================================"
+echo " Done. Next:"
+echo " 1. Open the 'reports_to_send' folder"
+echo " 2. Read each .html report in your browser"
+echo " 3. Send the good ones yourself via WhatsApp/email"
+echo " 4. Run: python3 outreach_tracker.py  (to log who you contacted)"
+echo "============================================"
