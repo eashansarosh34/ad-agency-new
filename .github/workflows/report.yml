@@ -23,6 +23,7 @@ jobs:
           META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CLIENT_NAME: ${{ secrets.CLIENT_NAME }}
+                    ORCHESTRATOR_DRY_RUN: ${{ secrets.ORCHESTRATOR_DRY_RUN }}
         run: python3 agent_03_reporting.py
 
       # Saves the generated report file so it builds up a real history in
