@@ -1,0 +1,50 @@
+name: Orchestrator
+
+# The agentic brain runs every 6 hours. It gathers state across all
+# clients, reasons about what needs doing, acts within guardrails,
+# and WhatsApps the owner a summary. This replaces the individual
+# fixed-rule scheduled tasks (optimize, arbitrage) — poll_leads and
+# report can stay as simple workflows since they don't need judgment.
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+
+      - name: Run the orchestrator
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+          META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+          CLIENTS_JSON: ${{ secrets.CLIENTS_JSON }}
+          AGENCY_OWNER_WHATSAPP: ${{ secrets.AGENCY_OWNER_WHATSAPP }}
+          WHATSAPP_TOKEN: ${{ secrets.WHATSAPP_TOKEN }}
+          WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          # Stays in dry-run until you explicitly add a repo secret
+          # ORCHESTRATOR_DRY_RUN with the value "false". Deliberate friction.
+          ORCHESTRATOR_DRY_RUN: ${{ secrets.ORCHESTRATOR_DRY_RUN }}
+        run: python3 orchestrator.py
+
+      # The decision log is the audit trail — persist it across runs so
+      # the orchestrator remembers its own recent decisions and doesn't
+      # repeat or contradict itself.
+      - name: Save decision log
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Orchestrator decisions [auto]"
+          git push
