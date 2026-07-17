@@ -23,13 +23,10 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python3 run_competitive_monitor.py
 
-      # trend_state.json is how this agent knows what it already saw last
-      # time - without saving it back, it would think everything is "new"
-      # on every single run.
       - name: Save trend state
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add trend_state.json new_concepts_from_trend_shift.json
+          git add -A
           git diff --staged --quiet || git commit -m "Update trend state [auto]"
           git push
